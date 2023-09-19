@@ -11,22 +11,12 @@ public class Employee {
     private final int salary;
     private final int departmentId;
 
-    public Employee(String fullName, int passportNumber) {
+    public Employee(String fullName, int passportNumber, int salary, int departmentId) {
 
-        Random random = new Random();
         this.fullName = fullName;
         this.passportNumber = passportNumber;
-        this.salary = random.nextInt(10000) + 1000;
-        this.departmentId = random.nextInt(2) + 1;
-    }
-
-    public Employee(String fullName, int passportNumber, int departmentId) {
-
-        Random random = new Random();
-        this.fullName = fullName;
-        this.passportNumber = passportNumber;
-        this.salary = random.nextInt(10000) + 1000;
-        this.departmentId = random.nextInt(3) + 1;
+        this.salary = salary;
+        this.departmentId = departmentId;
     }
 
     @Override

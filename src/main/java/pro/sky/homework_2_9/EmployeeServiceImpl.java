@@ -5,33 +5,34 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class EmployeeServiceC implements EmployeeServiceI{
+public class EmployeeServiceImpl implements EmployeeService{
 
-    private Map<String, Employee> employees;
+    private final Map<String, Employee> employees;
     private static final int MAX_SIZE = 10; // максимум сотрудников
+
+    public EmployeeServiceImpl(Map<String, Employee> employees)
+            throws EmployeeAlreadyAddedException, EmployeeStorageIsFullException{
+
+        this.employees = employees;
+
+        addNewEmployee("Max Tarasov", 5017, 20000, 1);
+        addNewEmployee("Yulia Kalacheva", 4280, 40000, 2);
+        addNewEmployee("Alex White", 2362, 25000, 3);
+        addNewEmployee("Pavel Varna", 2886, 15000, 1);
+        addNewEmployee("Andrey Astapov", 5021, 35000, 2);
+        addNewEmployee("Fedor Barahoev", 2308, 45000, 3);
+    }
 
     public String employees(){
         return "Список сотрудников:\n" + employees;
     }
 
     @Override
-    public void EmployeeService() throws EmployeeAlreadyAddedException, EmployeeStorageIsFullException {
-        this.employees = new HashMap<>();
-
-        addNewEmployee("Max Tarasov", 5017);
-        addNewEmployee("Yulia Kalacheva", 4280);
-        addNewEmployee("Alex White", 2362);
-        addNewEmployee("Pavel Varna", 2886);
-        addNewEmployee("Andrey Astapov", 5021);
-        addNewEmployee("Fedor Barahoev", 2308);
-    }
-
-    @Override
     // метод для добавления сотрудника
-    public Employee addNewEmployee(String fullName, int passportNumber)
+    public Employee addNewEmployee(String fullName, int passportNumber, int salary, int departmentId)
             throws EmployeeStorageIsFullException, EmployeeAlreadyAddedException {
 
-        Employee employee = new Employee(fullName, passportNumber);
+        Employee employee = new Employee(fullName, passportNumber, salary, departmentId);
 
         // проверка на наличие сотрудника перед добавлением
         if (employees.containsKey(employee.getFullName())){
@@ -51,10 +52,10 @@ public class EmployeeServiceC implements EmployeeServiceI{
 
     @Override
     // метод для удаления сотрудника
-    public Employee removeEmployee(String fullName, int passportNumber)
+    public Employee removeEmployee(String fullName, int passportNumber, int salary, int departmentId)
             throws EmployeeNotFoundException {
 
-        Employee employee = new Employee(fullName, passportNumber);
+        Employee employee = new Employee(fullName, passportNumber, salary, departmentId);
 
         // проверка на наличие сотрудника перед удалением
         if (!employees.containsKey(employee.getFullName())){
@@ -69,10 +70,10 @@ public class EmployeeServiceC implements EmployeeServiceI{
 
     @Override
     // метод для поиска сотрудника
-    public Employee findEmployee(String fullName, int passportNumber)
+    public Employee findEmployee(String fullName, int passportNumber, int salary, int departmentId)
             throws EmployeeNotFoundException {
 
-        Employee employee = new Employee(fullName, passportNumber);
+        Employee employee = new Employee(fullName, passportNumber, salary, departmentId);
 
         if (employees.containsKey(employee.getFullName())){
             return employees.get(employee.getFullName());

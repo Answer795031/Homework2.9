@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.*;
 public class EmployeeController {
 
     @ExceptionHandler
-    public String handleException(Exception e){
+    public String handleException(RuntimeException e){
         return e.getMessage();
     }
 
-    private final EmployeeServiceC employeeService;
+    private final EmployeeServiceImpl employeeService;
 
     // инжектим EmployeeService в EmployeeController
-    public EmployeeController(EmployeeServiceC employeeService) {
+    public EmployeeController(EmployeeServiceImpl employeeService) {
         this.employeeService = employeeService;
     }
 
@@ -22,24 +22,33 @@ public class EmployeeController {
         return employeeService.employees();
     }
 
-    @GetMapping(path = "/add")   // /employee/add?fullName=Ivan_Ivanov&passportNumber=3498
+    // добавление сотрудника
+    @GetMapping(path = "/add")   // /employee/add?fullName=Ivan_Ivanov&passportNumber=3498&salary=10000&departmentId=4
     public Employee addNewEmployee(@RequestParam("fullName") String fullName,
-                                   @RequestParam("passportNumber") int passportNumber)
+                                   @RequestParam("passportNumber") int passportNumber,
+                                   @RequestParam("salary") int salary,
+                                   @RequestParam("departmentId") int departmentId)
             throws EmployeeAlreadyAddedException, EmployeeStorageIsFullException {
-        return employeeService.addNewEmployee(fullName, passportNumber);
+        return employeeService.addNewEmployee(fullName, passportNumber, salary, departmentId);
     }
 
-    @GetMapping(path = "/remove")    // /employee/remove?fullName=Ivan_Ivanov&passportNumber=3498
+    // удаление сотрудника
+    @GetMapping(path = "/remove")    // /employee/remove?fullName=Ivan_Ivanov&passportNumber=3498&salary=10000&departmentId=4
     public Employee removeEmployee(@RequestParam("fullName") String fullName,
-                                   @RequestParam("passportNumber") int passportNumber)
+                                   @RequestParam("passportNumber") int passportNumber,
+                                   @RequestParam("salary") int salary,
+                                   @RequestParam("departmentId") int departmentId)
             throws EmployeeNotFoundException {
-        return employeeService.removeEmployee(fullName, passportNumber);
+        return employeeService.removeEmployee(fullName, passportNumber, salary, departmentId);
     }
 
-    @GetMapping(path = "/find")  // /employee/find?passportNumber=3498
+    // поиск сотрудника
+    @GetMapping(path = "/find")  // /employee/find?fullName=Ivan_Ivanov&passportNumber=3498&salary=10000&departmentId=4
     public Employee findEmployee(@RequestParam("fullName") String fullName,
-                               @RequestParam("passportNumber") int passportNumber)
+                                 @RequestParam("passportNumber") int passportNumber,
+                                 @RequestParam("salary") int salary,
+                                 @RequestParam("departmentId") int departmentId)
             throws EmployeeNotFoundException {
-        return employeeService.findEmployee(fullName, passportNumber);
+        return employeeService.findEmployee(fullName, passportNumber, salary, departmentId);
     }
 }

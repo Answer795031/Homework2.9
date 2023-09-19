@@ -9,37 +9,38 @@ import java.util.Map;
 @RequestMapping("/departments")
 public class DepartmentController {
 
-    private final DepartmentServiceC departmentService;
+    private final DepartmentServiceImpl departmentService;
 
-    public DepartmentController(DepartmentServiceC departmentService) {
+    public DepartmentController(DepartmentServiceImpl departmentService) {
         this.departmentService = departmentService;
     }
 
     @ExceptionHandler
-    public String handleException(Exception e) {
+    public String handleException(RuntimeException e) {
         return e.getMessage();
     }
 
-    @GetMapping(path = "/max-salary")  // /departments/max-salary?departmentId=5
-    public Employee findMaxSalary(@RequestParam("departmentId") int departmentId)
-            throws EmployeeNotFoundException {
+    // поиск сотрудника с максимальной з/п в отделе
+    @GetMapping(path = "/max-salary")  // /departments/max-salary?departmentId=1
+    public Employee findMaxSalary(@RequestParam("departmentId") int departmentId) {
         return departmentService.findMaxSalary(departmentId);
     }
 
-    @GetMapping(path = "/min-salary")  // /departments/min-salary?departmentId=5
-    public Employee findMinSalary(@RequestParam("departmentId") int departmentId)
-            throws EmployeeNotFoundException {
+    // поиск сотрудника с минимальной з/п в отделе
+    @GetMapping(path = "/min-salary")  // /departments/min-salary?departmentId=1
+    public Employee findMinSalary(@RequestParam("departmentId") int departmentId) {
         return departmentService.findMinSalary(departmentId);
     }
 
-    @GetMapping(path = "/all", params = {"departmentId"})  // /departments/all-by-department?departmentId=5
-    public Employee findAllByDepartment(@RequestParam("departmentId") int departmentId)
-            throws EmployeeNotFoundException {
-        return departmentService.findAllByDepartment(departmentId);
+    // поиск всех сотрудников в отделе
+    @GetMapping(path = "/all", params = {"departmentId"})  // /departments/all?departmentId=1
+    public Collection<Employee> findAll(@RequestParam Integer departmentId) {
+        return departmentService.findAll(departmentId);
     }
 
+    // поиск всех сотрудников с группировкой по отделам
     @GetMapping(path = "/all")  // /departments/all
-    public Map<Integer, List<Employee>> findAll() throws EmployeeNotFoundException {
+    public Map<Integer, List<Employee>> findAll() {
         return departmentService.findAll();
     }
 }
